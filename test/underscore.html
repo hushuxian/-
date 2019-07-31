@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script type="text/javascript" src="js/underscore.1.js"></script>
+	<script type="text/javascript">
+		/*console.log(_.unique([1,2,2,3,4,5,4]));
+		console.log(_.unique([1,2,3,'A','a'],function(n){
+			return typeof n == 'string' ? n.toLowerCase() : n;
+		}))*/
+		/*var db = _([1,2,3,3]);
+
+		var p = {
+			name:'hushuxian'
+		}
+		_.map([1,2,3,3],function(v,i,obj){
+			return v*v;
+		},p)
+
+		var test = function(count,rest){
+			console.log(rest);
+		}
+
+		var restTest = _.restArguments(test);
+		restTest(2,333,44,3);
+		*/
+
+		/*var box = {
+			s :"this is box",
+			number: 1
+		}
+		console.log(_([1,2,3,4]).reduce(function(memo,value,index,obj){
+			return memo + value ;
+		},5,box));
+
+
+		console.log(_.filter([1,2,4,5],function(elem , index ){
+			return elem > 3 && index < 3;
+		}))*/
+
+		/*console.log(_.lastIndexOf([1,2,3,3,NaN,NaN],NaN,false));*/
+		
+		/*console.log(_.sample([1,2,3,4,5,6,7,8,9,10],5));
+		console.log(_.shuffle([1,2,3,4,1,6,7,8,9,10]));*/
+
+		//console.log(_.flatten([[[1]], [2,3],[[4,5]]], false));
+		console.log(_.initial([1,2,5,7,9],2))
+	</script>
+</body>
+</html>
