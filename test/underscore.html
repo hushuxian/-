@@ -47,7 +47,54 @@
 		console.log(_.shuffle([1,2,3,4,1,6,7,8,9,10]));*/
 
 		//console.log(_.flatten([[[1]], [2,3],[[4,5]]], false));
-		console.log(_.initial([1,2,5,7,9],2))
+		/*console.log(_.unique([1,2,5,5,7,7,9,9],true));
+		console.log(_.range(1,11,2))*/
+
+		/*function add(a,b,c,d){
+			return a+b+c+d;
+		}
+
+		var partialAdd = _.partial(add,5);
+		console.log(partialAdd(5,7,1));*/
+
+
+
+		/*function a(){
+			
+			return function(){
+				console.log(this.name); 
+			}
+			this.name = 'hi';
+		}
+		a()();*/
+
+
+		/*var fibonacci = _.memorize(function(n){
+			return n < 2 ? n : fibonacci(n - 1) + fibonacci(n -2);
+
+		})
+		console.log(fibonacci(5));
+		console.log(fibonacci.cache);
+
+
+		var factorial = _.memorize(function(n){
+			return n < 2 ? n : factorial(n-1)*n;
+		})
+		console.log(factorial(10));
+		console.log(factorial.cache);*/
+
+		/*var throttle = _.throttle(function(){
+			console.log('hello')
+		},5000,{trailing:false})
+		window.onresize = throttle;
+
+		var debounce = _.debounce(function(){
+			console.log('bounce')
+		},2000,false)
+		window.onresize = debounce;*/
 	</script>
+
+	
+	
 </body>
 </html>

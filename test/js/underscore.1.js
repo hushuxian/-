@@ -4,12 +4,13 @@
 	var _= function(obj){
 		var instance;
 		if(obj instanceof _){
-			return obj;
+			return obj; 
 		}else if(!(this instanceof _)){
 			return new _(obj)
 		}
 		this.wrapped = obj;
 	};
+	_.now = Date.now;
 	_.functions = function(obj){
 		var funs = [];
 		var key;
@@ -18,13 +19,23 @@
 		}
 		return funs;
 	}
-	_.unique = function(arr,callback){
+	_.uniq = _.unique = function(arr,isSorted,iteratee,context){
 		var rest = [];
-		var val;
+		var pre,val,isSorted,iteratee;
+		if(!_.isBoolean(isSorted)){
+			context = iteratee;
+			iteratee =  isSorted;
+			isSorted = false;
+		}
 		for(var i = 0;i<arr.length;i++){
-			val = callback ? callback(arr[i]) : arr[i];
-			if(rest.indexOf(val) == -1){
-				rest.push(val)
+			val = iteratee ? iteratee(arr[i]) : arr[i];
+			if(isSorted){
+				if(!i || pre !== val){
+					rest.push(val);
+					pre = val;
+				}
+			}else if(rest.indexOf(val) == -1){
+					rest.push(val)
 			}
 		}
 		return rest;
@@ -59,7 +70,7 @@
 	_.sample = function(arr,n){
 		var length = arr.length;
 		if(n == null){
-			return arr[_.random(length -1)]
+			return arr[_.random(length -1)];
 		}
 		var sample = _.clone(arr);
 		n = Math.max(0,Math.min(n,length));
@@ -139,26 +150,74 @@
 		}
 	})
 	_.map = function(obj,iteratee,context){
-		var interatee = cb(interatee,context);
+		var iteratee = cb(iteratee,context);
 		var keys = !_isArray(obj) && Objects.keys(obj);
 		var length = (keys || obj).length;
 		var result = Array(length);
 		for(var i = 0;i<length;i++){
 			var currentKey = keys ? onj[i] : i;
-			result[i] = interatee.call(obj[currentKey],i,obj)
+			result[i] = iteratee.call(obj[currentKey],i,obj)
 		}
 
 		return result;
 
 
 	}
-	_.filter = _.select =  function(obj,interatee,context){
-		var interatee = cb(interatee,context);
+	_.filter = _.select =  function(obj,iteratee,context){
+		var iteratee = cb(iteratee,context);
 		var result = [];
 		_.each(obj,function(value,index,list){
-			if(interatee(value,index,list)) result.push(value);
+			if(iteratee(value,index,list)) result.push(value);
 		});
 		return result;
+	}
+	_.compact = function(arr){
+		return _.filter(arr,_.identity);
+	}
+
+	_.range = function(start,stop,step){
+		var rest = [];
+		if(!stop){
+			stop = start || 0;
+			start = 0;
+		}
+		var step = step || 1;
+		var length = Math.max(Math.ceil((stop - start)/step),0);
+		for(var i = 0;i<length;i++){
+			rest[i] = start + i*step;
+		}
+		return rest;
+
+	}
+	_.partial = function(func){
+		var args = [].slice.call(arguments,1);
+		return function(){
+			var index =  0;
+			while(index < arguments.length){
+				args.push(arguments[index++]);
+			}
+			return func.apply(this,args);
+		}
+	}
+	_.has = function(obj,key){
+		return obj !== null && obj.hasOwnProperty(key);
+	}
+	_.memorize = function(func,harsh){
+		var memorize = function(key){
+			var cache = memorize.cache;
+			var address = '' + (harsh ? harsh.apply(this,arguments) : key);
+
+			// 不能直接用 key 代替address，会把形参转换成string。
+			if(!_.has(cache,address)){
+				cache[address] = func.apply(this,arguments);
+			}
+			return cache[address];
+			
+
+
+		}
+		memorize.cache = {};
+		return memorize;
 	}
 	_.isNaN = function(num){
 		return _.isNumber(num) && num !== num;
@@ -208,12 +267,12 @@
 	}
 	_.indexOf = createIndexOf(1,_.findNaN,_.biseSort);
 	_.lastIndexOf = createIndexOf(-1,_.findLastNaN);
-	function cb(interatee,context,count){
-		if(interatee == null){
+	function cb(iteratee,context,count){
+		if(iteratee == null){
 			return _.identity
 		}
-		if(_.isFunction(interatee)){
-			return optionmizeCb(interatee,context,count);
+		if(_.isFunction(iteratee)){
+			return optionmizeCb(iteratee,context,count);
 		}
 	}
 	function optionmizeCb(func,context,count){
@@ -235,7 +294,7 @@
 		}
 	}
 	var createReduce = function(dir){
-		var reduce = function(obj,interatee,memo,init){
+		var reduce = function(obj,iteratee,memo,init){
 			var keys = !_.isArray(obj) && obj.key;
 			var length = keys ? keys.length : obj.length;
 			var index = dir > 0 ? 0 : length -1;
@@ -245,13 +304,13 @@
 			}
 			for(;index >= 0 && index < length;index += dir ){
 				var currentKey = keys ? keys[index]:index;
-				memo = interatee(memo,obj[currentKey],currentKey,obj);
+				memo = iteratee(memo,obj[currentKey],currentKey,obj);
 			}
 			return memo;
 		}
-		return function(obj,interatee,memo,context){
+		return function(obj,iteratee,memo,context){
 			var init = arguments.length >= 3;
-			return reduce(obj,optionmizeCb(interatee,context,4),memo,init);
+			return reduce(obj,optionmizeCb(iteratee,context,4),memo,init);
 		}
 	}
 	_.reduce = createReduce(1);
@@ -261,6 +320,74 @@
 	_.result = function(instance,obj){
 		return instance._chain ? _(obj) : obj;
 	}
+
+	_.throttle = function(fn,wait,options){
+		
+		var args,remain,lastTime =  0,timer = null,result;
+		if(!options){
+			options = {}
+		}
+
+		function later(){
+			lastTime = options.leading === false ? 0 : _.now();
+			timer = null;
+			result = fn.apply(null,args);
+			
+		}
+		return function(){
+			var now = _.now();
+			args = arguments;
+			if(!lastTime && options.leading === false){
+				lastTime = now;
+			}
+			remain = wait - (now-lastTime);
+			console.log(remain)
+			if(remain <= 0 && options.leading !== false){
+				if(timer){
+					clearTimeout(timer);
+					timer = null;
+				}
+				lastTime = now;
+
+				result = fn.apply(null,args);
+				
+			}else if(!timer && options.trailing !== false){
+				
+				timer = setTimeout(later,remain);
+			}
+			return result;
+		}
+	}
+	_.debounce = function(fn,wait,immediate){
+		var lastTime,timer = null, args,callNow,result;
+
+		function later(){
+			var last= _.now() - lastTime;
+			console.log(last);
+			if(last < wait){
+				timer = setTimeout(later,last);
+			}else{
+				timer = null;
+				if(!immediate){
+					result = fn.apply(null,args);
+				}
+			}
+
+		}
+		return function(){
+			args = arguments;
+			lastTime = _.now();
+			callNow = (immediate && !timer);
+			console.log(callNow);
+			if(!timer){
+				timer = setTimeout(later,wait)
+			}
+			if(callNow){
+				result = fn.apply(null,args);
+			}
+			return result;
+		}
+	}
 	_.chain = function(obj){
 		//var instance = _(obj);
 		this._chain = true;
@@ -268,6 +395,10 @@
 	}
 	_.prototype.value = function(){
 		return this.wrapped;
+	}
+	_.noConflict = function(prop){
+		root.hasOwnProperty('_') ? (root[prop] = _) : root._ = _;
+		
 	}
 	_.minxin = function(obj){
 		_.each(_.functions(obj),function(name){
@@ -280,6 +411,7 @@
 		});
 
 	}
-	_.minxin(_)
-	root._ = _;
+
+	_.minxin(_);
+	_.noConflict('underscore');
 })(this)

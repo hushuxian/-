@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+<script type="text/javascript">
+	var arr = [NaN ,1,21,32,NaN,41,5];
+	function getVal(val){
+		return val;
+	}
+	var filter = function(arr,iteratee){
+		var rest = [];
+		var iteratee = iteratee && toString.call(iteratee) == 'Function' ? iteratee : getVal;
+		for(var i = 0; i< arr.length; i++){
+			iteratee.call(this,arr[i]) && rest.push(arr[i]);
+		}
+		console.log(rest);
+	}
+	filter(arr,function(value){
+		return !(typeof(value) == 'number' && value !== value);
+	})
+</script>
+
+</html>
