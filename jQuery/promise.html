@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	
+</body>
+<script type="text/javascript">
+	function ajax(method,url,data){
+		var request = new XMLHttpRequest();
+		return new Promise((resolve,reject)=>{
+			request.onreadystatechange = function(){
+				console.log(request.readyState)
+				if(request.readyState === 4){
+					if(request.status === 200){
+						resolve(request.responseText);
+					}else{
+						reject(request.status);
+					}
+				}
+			};
+			request.open(method,url);
+			request.send(data)
+		})
+	}
+
+	var p = ajax('get','jstest.html');
+	p.then((data)=>{
+		console.log(1);
+		console.log(data);
+	})
+	.catch((status)=>{
+		console.log(2);
+		console.log(status);
+	})
+
+</script>
+</html>

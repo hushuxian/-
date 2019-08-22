@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>underscore</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+	<div>
+		<input type="text" class="text" placeholder="请输入" >
+		<div class="btn btn-info" type="submit" style="border:none;">提交</div>
+		<span class="span"></span>
+
+		<div id="template">
+			
+		</div>
+	</div>
+	<script type="text/javascript" src="js/underscore.1.js"></script>
+	<script type="text/template" id="tpl">
+		<ul>
+			<% for(i in obj){ %>
+			<li><%-obj[i].name %></li>
+			<% } %>
+		</ul>
+	</script>
+	<script type="text/javascript">
+		 /*var textin = document.querySelector('.text');
+		 var submit = document.querySelector('.btn-info');
+		 var add = document.querySelector('.span')
+		 submit.onclick = function(){
+		 	var value = textin.value;
+		 	value = _.escape(value);
+		 	add.innerHTML = value;
+		 }*/
+
+		/*console.log(_.unique([1,2,2,3,4,5,4]));
+		console.log(_.unique([1,2,3,'A','a'],function(n){
+			return typeof n == 'string' ? n.toLowerCase() : n;
+		}))*/
+		/*var db = _({hi:1,hello:2})
+
+		var p = {
+			name:'hushuxian'
+		}
+		console.log(db.reduce(function(init,value,key){
+			return init + key;
+		},1))
+
+		var test = function(count,rest){
+			console.log(rest);
+		}
+
+		var restTest = _.restArguments(test);
+		restTest([2,333,44,3],3);
+		*/
+
+		/*var box = {
+			s :"this is box",
+			number: 1
+		}
+		console.log(_([1,2,3,4]).reduce(function(memo,value,index,obj){
+			return memo + value ;
+		},5,box));
+
+
+		console.log(_.filter([1,2,4,5],function(elem , index ){
+			return elem > 3 && index < 3;
+		}))*/
+
+		/*console.log(_.lastIndexOf([1,2,3,3,NaN,NaN],NaN,false));*/
+		
+		/*console.log(_.sample([1,2,3,4,5,6,7,8,9,10],5));
+		console.log(_.shuffle([1,2,3,4,1,6,7,8,9,10]));*/
+
+		//console.log(_.flatten([[[1]], [2,3],[[4,5]]], false));
+		/*console.log(_.unique([1,2,5,5,7,7,9,9],true));
+		console.log(_.range(1,11,2))*/
+
+		/*function add(a,b,c,d){
+			return a+b+c+d;
+		}
+
+		var partialAdd = _.partial(add,5);
+		console.log(partialAdd(5,7,1));*/
+
+
+
+		/*function a(){
+			
+			return function(){
+				console.log(this.name); 
+			}
+			this.name = 'hi';
+		}
+		a()();*/
+
+
+		/*var fibonacci = _.memorize(function(n){
+			return n < 2 ? n : fibonacci(n - 1) + fibonacci(n -2);
+
+		})
+		console.log(fibonacci(5));
+		console.log(fibonacci.cache);
+
+
+		var factorial = _.memorize(function(n){
+			return n < 2 ? n : factorial(n-1)*n;
+		})
+		console.log(factorial(10));
+		console.log(factorial.cache);*/
+
+		/*var throttle = _.throttle(function(){
+			console.log('hello')
+		},5000,{trailing:false})
+		window.onresize = throttle;
+
+		var debounce = _.debounce(function(){
+			console.log('bounce')
+		},2000,false)
+		window.onresize = debounce;*/
+		/*function fn1(a){
+			return a*2;
+		}
+		function fn2(a){
+			return a+2
+		}
+		function fn3(a){
+			return a/2;
+		}
+		var fn = _.compose(fn1,fn2,fn3);
+		console.log(fn(4));*/
+		/*var extObj = [1,2,3,4,5,6]
+		var copy = {name:{per:"hi",se:"fe"},arr:extObj};
+		var target  = _.extend({name:'wod'},copy);
+		console.log(copy.name === target.name);
+		console.log(target);*/
+
+
+		var obj = {name:'hu',toString:11,arr:[[1,2,3,4,[5]]]};
+		var names = [];
+		for( pro in obj){
+			names.push(pro);
+		}
+		var b = _.extend(obj);
+		console.log(obj.arr === b.arr);
+		console.log(_.extendOwn(obj));
+		
+		var c = _.deepClone(obj);
+		console.log(c);
+		console.log(obj.arr === c.arr);
+
+		var ret = _.pick({
+				name: 'max',
+				age: 30, //yes
+				userid: 'wzy'
+			}, function(value, key, object) { //迭代器函数   //iteratee(value, key, object)
+				return _.isNumber(value);
+			});
+
+
+		var ret1 = _.pick({
+				name: 'max',
+				age: 30, //yes
+				userid: 'wzy'
+			}, "name","age");     //{age:"30"}
+			
+	   console.log(ret)
+	   console.log(ret1)
+
+		/*var data = [
+		{name:"hi"},
+		{name:"hello"},
+		{name:"hey"}
+		];
+		var templateString = document.getElementById("tpl").innerHTML;
+		var compiled = _.template(templateString);
+		var renderString = compiled(data);
+		console.log(renderString);
+		document.querySelector("#template").innerHTML = renderString;*/
+
+
+
+
+	</script>
+
+	
+	
+</body>
+</html>

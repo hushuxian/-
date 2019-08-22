@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>LAZYLOAD</title>
+	<style type="text/css">
+		html,body{height:100%;overflow-y: hidden;}
+		.container{height:100%;overflow-y: scroll;}
+		.container img{height:auto;}
+	</style>
+	<script type="text/javascript" src="js/jquery-1.9.1.js"></script>
+	
+</head>
+<body>
+	<!-- <div class="container">
+		
+	</div> -->
+
+
+	<form>
+		<input type="email"  name="">
+		<input type="password"  name="">
+		<button type="submit"></button>
+	</form>
+</body>
+	<script type="text/javascript" src="js/lazyload.js"></script>
+	<script type="text/javascript">
+		var imgList = ['5-1.png','5-2.png','5-3.png','5-4.png','5-5.png','5-6.png','5-7.png','5-8.png','5-9.png','5-10.png'];
+		var path ='images/', preview = 'logo.png',nodeStr = '';
+		var len = imgList.length;
+		for(var i = 0;i<100;i++){
+			nodeStr += `<img data-src='${path + imgList[i%len]}'>`;
+		}
+		$(".container").html(nodeStr);
+		$(".container").lazyload({
+			col : 2, //列数
+			defaultImg : path+preview // 默认图片地址
+		})
+	</script>
+
+
+</html>

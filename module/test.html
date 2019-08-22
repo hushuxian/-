@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+
+</body>
+<script>
+
+
+
+function fn( require, exports, module){
+      /* require("c.js")  */
+      //  require("a.js")
+      var age = "30";
+      var b =require("b.js");
+      exports.age = age;
+}
+ 
+var str = fn.toString();
+var REQUIRE_RE = /(?<!(\/\*|\/\/)\s*)require\s*\(\s*(["'])(.+?)\1\s*\)/g;
+//var REQUIRE_RE = /(?<![\/\*|\/\/]\s*)require\s*\(\s*(["'])(.+?)\1\s*\)/g;
+var context = function(){};
+str.replace(REQUIRE_RE, function(context ,m1 ,m2 ,m3){
+console.log(m3);  // => c.js  b.js
+//console.log(m2);  // => c.js  b.js
+})
+</script>
+</html>

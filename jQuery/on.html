@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body id="content">
+	<div id="box" style="width: 100px;height:100px;background: rgba(0,0,0,0.5)"></div>
+	<!-- <script type="text/javascript" src="js/jquery-1.7.0.js"></script>
+	<script type="text/javascript" src="js/jquery.1.0.1.js"></script>
+	<script type="text/javascript" src="js/jquery-1.js"></script> -->
+	<script type="text/javascript" src="js/Underscore.js"></script>
+	 <!--<script type="text/javascript" src="js/Underscore-1.js"></script> -->
+	<script type="text/javascript">
+		/*$("div").on('click',function(event){
+			console.log('clicked');
+		})*/
+		/*var body = document.getElementById("content");
+		body.addEventListener('click', function(){console.log('b')})
+		var box = document.getElementById("box");
+		box.addEventListener('click', function(){console.log('a')})
+		$(box).trigger('click')*/
+		var say = function(name,age){
+			console.log(name,age);
+		}
+		var doo = function(){
+			console.log('do');
+		}
+		var callbacks = _.callbacks('unique once memory');
+		callbacks.add(say);
+		callbacks.fire('hello','22');
+		callbacks.add(doo);
+		callbacks.add(doo);
+	</script>
+</body>
+</html>
